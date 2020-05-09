@@ -30,7 +30,7 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: ~/Library/Caches/Homebrew
-        key: homebrew-cache-${{ hashFiles('**') }}
+        key: homebrew-cache-${{ hashFiles('**/Lanraragi.rb') }}
         restore-keys: |
           homebrew-cache-
     - uses: actions/checkout@master

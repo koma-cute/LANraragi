@@ -5,6 +5,7 @@ jobs:
     name: Run Perl Critic
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@master
     - name: Perl Critic
       uses: Difegue/action-perlcritic@master
       env:

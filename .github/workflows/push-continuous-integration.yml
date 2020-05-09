@@ -8,7 +8,8 @@ jobs:
     - uses: actions/checkout@master
     - name: Test Docker Build
       run: |
-        docker build -t difegue/lanraragi -f ./tools/build/docker/Dockerfile .
+        docker pull difegue/lanraragi:nightly
+        docker build --cache-from=difegue/lanraragi:nightly -t difegue/lanraragi -f ./tools/build/docker/Dockerfile .
     - name: LANraragi Test Suite
       uses: ./.github/action-run-tests
     - name: Perl Critic
@@ -30,5 +31,5 @@ jobs:
         brew update
         brew unlink node@12
         brew install --verbose --build-from-source Lanraragi.rb
-        brew test --verbose Lanraragi.rb 
+        brew test --verbose Lanraragi.rb
         brew audit --verbose Lanraragi.rb

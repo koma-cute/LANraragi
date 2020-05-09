@@ -1,9 +1,9 @@
-on: 
+on:
   push:
     branches:
     - dev
     - test-builds
-name: Continuous Delivery 
+name: Continuous Delivery
 jobs:
   buildNightlyDocker:
     name: Build and Push Docker Image
@@ -16,7 +16,7 @@ jobs:
         buildx-version: v0.3.1
         qemu-version: latest
     - uses: actions/cache@v1
-      with: 
+      with:
         path: /tmp/buildxcache
         key: ${{ runner.os }}-docker-buildx-${{ hashFiles('**') }}
         restore-keys: |
@@ -56,13 +56,13 @@ jobs:
     - name: Docker Build and export
       run: |
         docker build -t difegue/lanraragi -f ./tools/build/docker/Dockerfile .
-        docker create --name rootfs difegue/lanraragi 
+        docker create --name rootfs difegue/lanraragi
         docker export --output=package.tar rootfs
     - name: Upload rootfs
       uses: actions/upload-artifact@v1
       with:
         name: package
-        path: package.tar 
+        path: package.tar
 
   buildNightlyWSL:
     name: Build Nightly Windows Package
@@ -77,7 +77,7 @@ jobs:
     - name: Build MSI Installer
       shell: powershell
       run: |
-        Import-Module "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"; 
+        Import-Module "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\Microsoft.VisualStudio.DevShell.dll";
         Enter-VsDevShell -VsInstallPath "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise" -SkipAutomaticLocation
         $ErrorActionPreference = 'Continue'
         git submodule init
@@ -89,7 +89,7 @@ jobs:
       with:
         name: wsl
         path: ./tools/build/windows/Karen/Setup/bin/LANraragi.msi
-  
+
   uploadInstaller:
     name: Upload Installer to MEGA
     needs: buildNightlyWSL

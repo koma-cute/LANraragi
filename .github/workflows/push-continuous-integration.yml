@@ -1,8 +1,16 @@
 on: [push, pull_request]
 name: "Continuous Integration \U0001F44C\U0001F440"
 jobs:
+  perlCritic:
+    name: Run Perl Critic
+    - name: Perl Critic
+      uses: Difegue/action-perlcritic@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          args: ./lib/* ./script/* ./tools/install.pl
   testSuite:
-    name: Run Test Suite and Perl Critic
+    name: Run Test Suite
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -12,12 +20,6 @@ jobs:
         docker build --cache-from=difegue/lanraragi:nightly -t difegue/lanraragi -f ./tools/build/docker/Dockerfile .
     - name: LANraragi Test Suite
       uses: ./.github/action-run-tests
-    - name: Perl Critic
-      uses: Difegue/action-perlcritic@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-          args: ./lib/* ./script/* ./tools/install.pl
   testBrew:
     name: Test Homebrew version
     runs-on: macos-latest
